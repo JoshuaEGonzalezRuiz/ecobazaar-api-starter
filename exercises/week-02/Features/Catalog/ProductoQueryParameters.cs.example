@@ -1,0 +1,20 @@
+// Target path: src/EcoBazaar.Api/Features/Catalog/ProductoQueryParameters.cs
+// Purpose: validate list endpoint query parameters.
+
+using System.ComponentModel.DataAnnotations;
+
+namespace EcoBazaar.Api.Features.Catalog;
+
+public sealed class ProductoQueryParameters
+{
+    [Range(1, int.MaxValue)]
+    public int Page { get; init; } = 1;
+
+    [Range(1, 50)]
+    public int PageSize { get; init; } = 10;
+
+    [StringLength(100)]
+    public string? Search { get; init; }
+
+    // Add CategoriaId, SortBy, and SortDirection.
+}

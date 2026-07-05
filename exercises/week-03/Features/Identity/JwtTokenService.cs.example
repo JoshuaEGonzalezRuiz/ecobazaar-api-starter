@@ -1,0 +1,12 @@
+// Target path: src/EcoBazaar.Api/Features/Identity/JwtTokenService.cs
+// Purpose: create JWT bearer tokens from safe configuration.
+
+namespace EcoBazaar.Api.Features.Identity;
+
+public sealed class JwtTokenService
+{
+    // Read issuer, audience, and signing key from configuration.
+    // Do not hard-code real secrets.
+    // Include claims for user ID, email, and role.
+    // Sign with HMAC SHA-256.
+}

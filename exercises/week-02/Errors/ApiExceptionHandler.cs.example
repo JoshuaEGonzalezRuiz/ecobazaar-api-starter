@@ -1,0 +1,20 @@
+// Target path: src/EcoBazaar.Api/Errors/ApiExceptionHandler.cs
+// Purpose: translate expected exceptions into safe Problem Details responses.
+
+using Microsoft.AspNetCore.Diagnostics;
+
+namespace EcoBazaar.Api.Errors;
+
+public sealed class ApiExceptionHandler : IExceptionHandler
+{
+    public ValueTask<bool> TryHandleAsync(
+        HttpContext httpContext,
+        Exception exception,
+        CancellationToken cancellationToken)
+    {
+        // Map ResourceNotFoundException to 404.
+        // Map unexpected exceptions to a safe 500.
+        // Do not expose stack traces, SQL text, or connection strings.
+        throw new NotImplementedException("Complete this handler during Week 2.");
+    }
+}

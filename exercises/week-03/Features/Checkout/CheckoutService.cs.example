@@ -1,0 +1,15 @@
+// Target path: src/EcoBazaar.Api/Features/Checkout/CheckoutService.cs
+// Purpose: create sales transactionally and enforce ownership.
+
+namespace EcoBazaar.Api.Features.Checkout;
+
+public sealed class CheckoutService
+{
+    // Resolve ClienteID from the authenticated Usuario.
+    // Start a PostgreSQL transaction.
+    // Lock requested product rows.
+    // Validate active products and available stock.
+    // Decrement stock, create Venta, create DetalleVenta rows.
+    // Commit only after every item is valid.
+    // Return DTOs; never return EF entities.
+}

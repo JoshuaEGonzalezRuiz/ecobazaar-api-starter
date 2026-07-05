@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+.pgpass
+pgpass.conf
+*.log
+*.out
+*.backup
+*.dump
+bin/
+obj/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+-- Target path: database/03_checkout_support.sql
+-- Purpose: add API-owned defaults for safe checkout IDs.
+
+-- Create sequences for VentaID and DetalleVentaID.
+-- Set each sequence to start after the inherited SQL-course fixture IDs.
+-- Set DEFAULT nextval(...) on Venta.VentaID and DetalleVenta.DetalleVentaID.

@@ -1,0 +1,10 @@
+// Target path: src/EcoBazaar.Api/Features/Catalog/ProductoMapping.cs
+// Purpose: keep EF Core entities out of HTTP responses.
+
+namespace EcoBazaar.Api.Features.Catalog;
+
+public static class ProductoMapping
+{
+    // Create an EF-translatable projection expression.
+    // Avoid calling ordinary C# mapping methods inside IQueryable.Select(...).
+}

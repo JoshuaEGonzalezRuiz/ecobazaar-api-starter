@@ -1,0 +1,28 @@
+// Target path: src/EcoBazaar.Api/Controllers/CheckoutController.cs
+// Purpose: expose authenticated checkout and current-customer sales endpoints.
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EcoBazaar.Api.Controllers;
+
+[ApiController]
+[Authorize]
+public sealed class CheckoutController : ControllerBase
+{
+    [HttpPost("api/checkout")]
+    public async Task<IActionResult> CheckoutAsync(CancellationToken cancellationToken)
+    {
+        // Read current user ID from token claims.
+        // Do not accept ClienteID in the request body.
+        // Call the checkout service.
+        throw new NotImplementedException("Complete this endpoint during Week 3.");
+    }
+
+    [HttpGet("api/ventas/mias")]
+    public async Task<IActionResult> GetMySalesAsync(CancellationToken cancellationToken)
+    {
+        // Return only sales owned by the authenticated customer.
+        throw new NotImplementedException("Complete this endpoint during Week 3.");
+    }
+}

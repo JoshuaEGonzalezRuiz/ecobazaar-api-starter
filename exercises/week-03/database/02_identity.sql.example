@@ -1,0 +1,11 @@
+-- Target path: database/02_identity.sql
+-- Purpose: add API-owned identity without changing inherited SQL-course tables.
+
+CREATE TABLE Usuario (
+    -- Add UsuarioID as a generated primary key.
+    -- Add ClienteID as a unique foreign key to Cliente(ClienteID).
+    -- Add Correo as a unique email column.
+    -- Add PasswordHash as text.
+    -- Add Rol with allowed values such as Cliente and Operador.
+    -- Add FechaRegistro with a safe default.
+);

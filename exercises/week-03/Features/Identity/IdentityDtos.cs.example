@@ -1,0 +1,17 @@
+// Target path: src/EcoBazaar.Api/Features/Identity/*.cs
+// Purpose: define request and response DTOs for identity.
+
+namespace EcoBazaar.Api.Features.Identity;
+
+public sealed record AuthResponse(
+    string AccessToken,
+    string TokenType,
+    DateTimeOffset ExpiresAt);
+
+public sealed record UserResponseDto(
+    int Id,
+    int ClienteId,
+    string Correo,
+    string Rol);
+
+// Add validated RegisterUserRequest and LoginRequest classes.

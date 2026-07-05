@@ -1,0 +1,37 @@
+// Target path: src/EcoBazaar.Api/Controllers/AuthController.cs
+// Purpose: expose register, login, and current-user endpoints.
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace EcoBazaar.Api.Controllers;
+
+[ApiController]
+[Route("api/auth")]
+public sealed class AuthController : ControllerBase
+{
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterAsync(CancellationToken cancellationToken)
+    {
+        // Bind a register request.
+        // Call the identity service.
+        // Return 201 Created with a safe user DTO.
+        throw new NotImplementedException("Complete this endpoint during Week 3.");
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginAsync(CancellationToken cancellationToken)
+    {
+        // Bind a login request.
+        // Return an access token when credentials are valid.
+        throw new NotImplementedException("Complete this endpoint during Week 3.");
+    }
+
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMeAsync(CancellationToken cancellationToken)
+    {
+        // Add [Authorize].
+        // Read the current user ID from token claims.
+        // Return the current profile.
+        throw new NotImplementedException("Complete this endpoint during Week 3.");
+    }
+}

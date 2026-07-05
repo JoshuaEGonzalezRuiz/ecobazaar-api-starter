@@ -1,0 +1,58 @@
+using System.Security.Claims;
+using EcoBazaar.Api.Features.Logistics;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EcoBazaar.Api.Controllers;
+
+[ApiController]
+public sealed class LogisticsController(ILogisticsService logisticsService)
+    : ControllerBase
+{
+    [Authorize]
+    [HttpGet("api/envios/mios")]
+    public async Task<ActionResult<IReadOnlyList<ShipmentResponseDto>>> GetMyShipmentsAsync(
+        CancellationToken cancellationToken)
+    {
+        var shipments = await logisticsService.GetMyShipmentsAsync(
+            GetCurrentUserId(),
+            cancellationToken);
+
+        return Ok(shipments);
+    }
+
+    [Authorize(Roles = "Operador")]
+    [HttpGet("api/logistica/envios")]
+    public async Task<ActionResult<IReadOnlyList<ShipmentResponseDto>>> GetAllShipmentsAsync(
+        CancellationToken cancellationToken)
+    {
+        var shipments = await logisticsService.GetAllShipmentsAsync(cancellationToken);
+        return Ok(shipments);
+    }
+
+    [Authorize(Roles = "Operador")]
+    [HttpPatch("api/logistica/envios/{id:int}/estado")]
+    public async Task<ActionResult<ShipmentResponseDto>> UpdateShipmentStatusAsync(
+        int id,
+        UpdateShipmentStatusRequest request,
+        CancellationToken cancellationToken)
+    {
+        var shipment = await logisticsService.UpdateShipmentStatusAsync(
+            id,
+            request,
+            cancellationToken);
+
+        return Ok(shipment);
+    }
+
+    private int GetCurrentUserId()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? User.FindFirstValue("nameid")
+            ?? User.FindFirstValue("sub");
+
+        return int.TryParse(userIdClaim, out var userId)
+            ? userId
+            : throw new UnauthorizedAccessException("Invalid user token.");
+    }
+}

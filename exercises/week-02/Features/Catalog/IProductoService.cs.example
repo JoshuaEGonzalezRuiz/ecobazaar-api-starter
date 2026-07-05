@@ -1,0 +1,11 @@
+// Target path: src/EcoBazaar.Api/Features/Catalog/IProductoService.cs
+// Purpose: define catalog use cases independently from controller code.
+
+namespace EcoBazaar.Api.Features.Catalog;
+
+public interface IProductoService
+{
+    // Add methods for:
+    // - paged product listing
+    // - single product detail lookup
+}

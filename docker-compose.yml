@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ecobazaar_api_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-ecobazaar_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-dev-password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - ecobazaar-db-data:/var/lib/postgresql/data
+      - ./database:/ecobazaar/database:ro
+      - ./scripts/docker_init_database.sh:/docker-entrypoint-initdb.d/00_run_all.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__EcoBazaar: Host=db;Port=5432;Database=${POSTGRES_DB:-ecobazaar_api_dev};Username=${POSTGRES_USER:-ecobazaar_app};Password=${POSTGRES_PASSWORD:-change-me-dev-password}
+      Jwt__Issuer: ${JWT_ISSUER:-EcoBazaar.Api}
+      Jwt__Audience: ${JWT_AUDIENCE:-EcoBazaar.Clients}
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:-development-only-signing-key-change-me-32-bytes}
+      Cors__AllowedOrigins__0: ${CORS_ALLOWED_ORIGIN:-http://localhost:5173}
+    ports:
+      - "${API_HTTP_PORT:-5180}:8080"
+
+volumes:
+  ecobazaar-db-data:

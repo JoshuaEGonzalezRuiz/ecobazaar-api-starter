@@ -1,0 +1,30 @@
+// Target path: src/EcoBazaar.Api/Controllers/ProductosController.cs
+// Purpose: expose catalog read operations through controller actions.
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace EcoBazaar.Api.Controllers;
+
+[ApiController]
+[Route("api/productos")]
+public sealed class ProductosController : ControllerBase
+{
+    // Inject the catalog service through the primary constructor.
+
+    [HttpGet]
+    public async Task<IActionResult> GetProductsAsync(CancellationToken cancellationToken)
+    {
+        // Bind validated query parameters from the query string.
+        // Call the catalog service.
+        // Return Ok(pageResponse).
+        throw new NotImplementedException("Complete this action during Week 2.");
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetProductAsync(int id, CancellationToken cancellationToken)
+    {
+        // Call the catalog service for one product.
+        // Return Ok(productResponse).
+        throw new NotImplementedException("Complete this action during Week 2.");
+    }
+}

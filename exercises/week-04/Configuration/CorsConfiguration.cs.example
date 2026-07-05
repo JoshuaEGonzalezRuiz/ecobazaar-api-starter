@@ -1,0 +1,36 @@
+namespace EcoBazaar.Api.Configuration;
+
+public static class CorsConfiguration
+{
+    public const string PolicyName = "EcoBazaarClients";
+
+    public static IServiceCollection AddEcoBazaarCors(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var allowedOrigins = configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>()
+            ?? [];
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy(PolicyName, policy =>
+            {
+                policy
+                    .WithMethods("GET", "POST", "OPTIONS")
+                    .WithHeaders("Authorization", "Content-Type");
+
+                if (allowedOrigins.Length == 0)
+                {
+                    policy.SetIsOriginAllowed(_ => false);
+                    return;
+                }
+
+                policy.WithOrigins(allowedOrigins);
+            });
+        });
+
+        return services;
+    }
+}

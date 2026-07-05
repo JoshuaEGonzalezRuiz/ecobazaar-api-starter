@@ -1,0 +1,14 @@
+// Target path: src/EcoBazaar.Api/Features/Checkout/*.cs
+// Purpose: define checkout request and sale response contracts.
+
+namespace EcoBazaar.Api.Features.Checkout;
+
+public sealed record SaleSummaryResponseDto(
+    int Id,
+    int ClienteId,
+    DateOnly FechaEmision,
+    decimal Total,
+    string Estado);
+
+// Add CheckoutRequest, CheckoutItemRequest, SaleResponseDto, and SaleItemResponseDto.
+// Do not include ClienteID in CheckoutRequest.

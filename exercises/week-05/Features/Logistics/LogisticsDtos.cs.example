@@ -1,0 +1,21 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace EcoBazaar.Api.Features.Logistics;
+
+public sealed record ShipmentResponseDto(
+    int Id,
+    int VentaId,
+    int ClienteId,
+    int RepartidorId,
+    string Repartidor,
+    string Estatus,
+    decimal Costo);
+
+public sealed class UpdateShipmentStatusRequest
+{
+    [Required]
+    [RegularExpression(
+        "^(Pendiente|En transito|Entregado|Cancelado)$",
+        ErrorMessage = "Estatus must be Pendiente, En transito, Entregado, or Cancelado.")]
+    public string Estatus { get; init; } = string.Empty;
+}

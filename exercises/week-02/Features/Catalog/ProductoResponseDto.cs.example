@@ -1,0 +1,13 @@
+// Target path: src/EcoBazaar.Api/Features/Catalog/ProductoResponseDto.cs
+// Purpose: define the public product JSON shape.
+
+namespace EcoBazaar.Api.Features.Catalog;
+
+public sealed record ProductoResponseDto(
+    int Id,
+    string Nombre,
+    string? Descripcion,
+    decimal Precio,
+    int Stock,
+    string Categoria,
+    bool Activo);

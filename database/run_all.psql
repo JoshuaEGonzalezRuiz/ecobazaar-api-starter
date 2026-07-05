@@ -1,0 +1,6 @@
+\set ON_ERROR_STOP on
+
+\echo 'Creating the sanitized EcoBazaar API baseline.'
+\ir bootstrap.sql
+\ir verify.sql
+\echo 'EcoBazaar API baseline verification completed successfully.'

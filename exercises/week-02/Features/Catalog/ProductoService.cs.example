@@ -1,0 +1,12 @@
+// Target path: src/EcoBazaar.Api/Features/Catalog/ProductoService.cs
+// Purpose: query PostgreSQL through EF Core and return DTO contracts.
+
+namespace EcoBazaar.Api.Features.Catalog;
+
+public sealed class ProductoService
+{
+    // Inject EcoBazaarDbContext.
+    // Build a public catalog query with active products that have stock.
+    // Apply search, category filter, stable sorting, and pagination.
+    // Return DTOs, not EF Core entities.
+}

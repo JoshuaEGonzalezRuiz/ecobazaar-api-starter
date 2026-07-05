@@ -1,0 +1,11 @@
+// Target path: src/EcoBazaar.Api/Features/Catalog/ProductosPageResponse.cs
+// Purpose: wrap list results with pagination metadata.
+
+namespace EcoBazaar.Api.Features.Catalog;
+
+public sealed record ProductosPageResponse(
+    IReadOnlyList<ProductoResponseDto> Items,
+    int Page,
+    int PageSize,
+    int TotalItems,
+    int TotalPages);

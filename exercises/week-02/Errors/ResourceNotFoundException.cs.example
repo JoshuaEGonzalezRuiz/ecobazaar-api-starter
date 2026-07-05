@@ -1,0 +1,10 @@
+// Target path: src/EcoBazaar.Api/Errors/ResourceNotFoundException.cs
+// Purpose: represent a known not-found condition in the API layer.
+
+namespace EcoBazaar.Api.Errors;
+
+public sealed class ResourceNotFoundException : Exception
+{
+    // Add resource name and identifier properties.
+    // Use this exception when a product does not exist or is not public.
+}

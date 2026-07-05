@@ -1,0 +1,12 @@
+// Target path: src/EcoBazaar.Api/Features/Identity/AuthService.cs
+// Purpose: implement registration, login, and profile lookup.
+
+namespace EcoBazaar.Api.Features.Identity;
+
+public sealed class AuthService
+{
+    // Inject EcoBazaarDbContext, password hasher, and token service.
+    // Registration must bind Usuario to an existing Cliente.
+    // Login must return a token only when the password hash verifies.
+    // Never return PasswordHash in a DTO.
+}

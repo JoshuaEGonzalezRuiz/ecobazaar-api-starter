@@ -1,0 +1,53 @@
+name: Validate API course Week 1
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  foundation:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ecobazaar_api_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ecobazaar_api_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGPASSWORD: postgres
+      API_PACKAGE_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ecobazaar_api_test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PostgreSQL client and ripgrep
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client ripgrep
+      - name: Validate sanitized baseline
+        run: scripts/validate_foundation.sh
+
+  dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Install smoke dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes curl ripgrep
+      - name: Restore
+        run: dotnet restore EcoBazaar.Api.slnx
+      - name: Build without warnings
+        run: dotnet build EcoBazaar.Api.slnx --no-restore -warnaserror
+      - name: Verify liveness without PostgreSQL
+        run: scripts/smoke_liveness.sh

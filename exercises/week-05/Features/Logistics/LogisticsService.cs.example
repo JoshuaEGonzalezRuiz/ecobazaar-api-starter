@@ -1,0 +1,105 @@
+using EcoBazaar.Api.Data;
+using EcoBazaar.Api.Data.Models;
+using EcoBazaar.Api.Errors;
+using Microsoft.EntityFrameworkCore;
+
+namespace EcoBazaar.Api.Features.Logistics;
+
+public interface ILogisticsService
+{
+    Task<IReadOnlyList<ShipmentResponseDto>> GetMyShipmentsAsync(
+        int userId,
+        CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<ShipmentResponseDto>> GetAllShipmentsAsync(
+        CancellationToken cancellationToken);
+
+    Task<ShipmentResponseDto> UpdateShipmentStatusAsync(
+        int shipmentId,
+        UpdateShipmentStatusRequest request,
+        CancellationToken cancellationToken);
+}
+
+public sealed class LogisticsService(EcoBazaarDbContext database)
+    : ILogisticsService
+{
+    public async Task<IReadOnlyList<ShipmentResponseDto>> GetMyShipmentsAsync(
+        int userId,
+        CancellationToken cancellationToken)
+    {
+        var user = await GetUserAsync(userId, cancellationToken);
+
+        return await database.Envios
+            .AsNoTracking()
+            .Where(shipment => shipment.Venta.Clienteid == user.Clienteid)
+            .OrderByDescending(shipment => shipment.Envioid)
+            .Select(shipment => new ShipmentResponseDto(
+                shipment.Envioid,
+                shipment.Ventaid,
+                shipment.Venta.Clienteid,
+                shipment.Repartidorid,
+                shipment.Repartidor.Nombre,
+                shipment.Estatus,
+                shipment.Costo))
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<ShipmentResponseDto>> GetAllShipmentsAsync(
+        CancellationToken cancellationToken)
+    {
+        return await database.Envios
+            .AsNoTracking()
+            .OrderByDescending(shipment => shipment.Envioid)
+            .Select(shipment => new ShipmentResponseDto(
+                shipment.Envioid,
+                shipment.Ventaid,
+                shipment.Venta.Clienteid,
+                shipment.Repartidorid,
+                shipment.Repartidor.Nombre,
+                shipment.Estatus,
+                shipment.Costo))
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<ShipmentResponseDto> UpdateShipmentStatusAsync(
+        int shipmentId,
+        UpdateShipmentStatusRequest request,
+        CancellationToken cancellationToken)
+    {
+        var shipment = await database.Envios
+            .Include(shipment => shipment.Repartidor)
+            .Include(shipment => shipment.Venta)
+            .SingleOrDefaultAsync(
+                shipment => shipment.Envioid == shipmentId,
+                cancellationToken);
+
+        if (shipment is null)
+        {
+            throw new ResourceNotFoundException("Envio", shipmentId.ToString());
+        }
+
+        shipment.Estatus = request.Estatus;
+        await database.SaveChangesAsync(cancellationToken);
+
+        return new ShipmentResponseDto(
+            shipment.Envioid,
+            shipment.Ventaid,
+            shipment.Venta.Clienteid,
+            shipment.Repartidorid,
+            shipment.Repartidor.Nombre,
+            shipment.Estatus,
+            shipment.Costo);
+    }
+
+    private async Task<Usuario> GetUserAsync(
+        int userId,
+        CancellationToken cancellationToken)
+    {
+        return await database.Usuarios
+            .AsNoTracking()
+            .SingleOrDefaultAsync(
+                user => user.Usuarioid == userId,
+                cancellationToken)
+            ?? throw new ResourceNotFoundException("Usuario", userId.ToString());
+    }
+}

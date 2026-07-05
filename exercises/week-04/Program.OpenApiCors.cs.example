@@ -1,0 +1,17 @@
+using EcoBazaar.Api.Configuration;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOpenApi();
+builder.Services.AddEcoBazaarCors(builder.Configuration);
+
+var app = builder.Build();
+
+app.MapOpenApi();
+app.UseCors(CorsConfiguration.PolicyName);
+
+app.MapControllers();
+
+app.Run();
+
+public partial class Program { }

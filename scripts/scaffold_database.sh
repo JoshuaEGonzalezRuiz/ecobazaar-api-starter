@@ -23,11 +23,30 @@ test -n "${ConnectionStrings__EcoBazaar:-}" || {
   exit 1
 }
 
+scaffold_connection="$ConnectionStrings__EcoBazaar"
+if [[ "$scaffold_connection" =~ ^postgres(ql)?:// ]]; then
+  url_without_scheme="${scaffold_connection#*://}"
+  credentials="${url_without_scheme%%@*}"
+  host_and_database="${url_without_scheme#*@}"
+  host_and_port="${host_and_database%%/*}"
+  database="${host_and_database#*/}"
+  username="${credentials%%:*}"
+  password="${credentials#*:}"
+  host="${host_and_port%%:*}"
+  port="${host_and_port#*:}"
+
+  if [[ "$port" == "$host_and_port" ]]; then
+    port="5432"
+  fi
+
+  scaffold_connection="Host=$host;Port=$port;Database=$database;Username=$username;Password=$password"
+fi
+
 cd "$repo_root"
 dotnet tool restore
 dotnet restore "$project"
 dotnet ef dbcontext scaffold \
-  "Name=ConnectionStrings:EcoBazaar" \
+  "$scaffold_connection" \
   Npgsql.EntityFrameworkCore.PostgreSQL \
   --project "$project" \
   --startup-project "$project" \
